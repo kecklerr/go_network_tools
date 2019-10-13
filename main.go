@@ -25,6 +25,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("scheme", r.URL.Scheme)
 	fmt.Println(r.Form["url_long"])
 	if r.Method == "GET" {
+		//t, _ := template.ParseFiles("template/index.gtpl")
 		t, _ := template.ParseFiles("template/index.gtpl")
 		t.Execute(w, nil)
 	} else {
@@ -33,6 +34,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("host:", r.Form["host"])
 		fmt.Println("port:", r.Form["port"])
 	}
+	
+//	output := Message{}
+//	DisplayTmpl(w, output,"template/index.gtpl")
 
 }
 
@@ -143,7 +147,7 @@ func main() {
 	http.HandleFunc("/telnet", Telnet)
 	http.HandleFunc("/ping", Ping)
 	http.HandleFunc("/nslookup", LookupHost)
-	err := http.ListenAndServe(":9999", nil) // set listen port
+	err := http.ListenAndServe(":8080", nil) // set listen port
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
