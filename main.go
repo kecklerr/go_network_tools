@@ -25,19 +25,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("scheme", r.URL.Scheme)
 	fmt.Println(r.Form["url_long"])
 	if r.Method == "GET" {
+		output := Message{}
+		DisplayTmpl(w, output, "template/index.gtpl")
 		//t, _ := template.ParseFiles("template/index.gtpl")
-		t, _ := template.ParseFiles("template/index.gtpl")
-		t.Execute(w, nil)
+		//t.Execute(w, nil)
 	} else {
 		r.ParseForm()
-		// logic part of log in
 		fmt.Println("host:", r.Form["host"])
 		fmt.Println("port:", r.Form["port"])
 	}
-	
-//	output := Message{}
-//	DisplayTmpl(w, output,"template/index.gtpl")
-
 }
 
 func LookupHost(w http.ResponseWriter, r *http.Request) {
@@ -108,23 +104,18 @@ func Telnet(w http.ResponseWriter, r *http.Request) {
 		conn, err := net.DialTimeout("tcp", net.JoinHostPort(myhost,myport), time.Second)
 		if err != nil {
 			fmt.Println("could not connect to server: ", err)
-			// use template but send error about not able to connect
 			mymessage = Message{Body: "No Connection - Error"}
-			//DisplayTmpl(w, "No Connection - Error", "template/telnet.gtpl")
 			DisplayTmpl(w, mymessage, "template/telnet.gtpl")
 		}
 		if conn != nil {
 			defer conn.Close()
-			// use template but send good message on connection
 			mymessage = Message{Body: "Good Connection"}
-			//DisplayTmpl(w, "Good Connection", "template/telnet.gtpl")
 			DisplayTmpl(w, mymessage, "template/telnet.gtpl")
 		}
 
 	} else {
 		fmt.Println("It did NOT match")
 		mymessage = Message{Body: "Either the Host or port is not correct"}
-		//DisplayTmpl(w, "Either the Host or port is not correct", "template/telnet.gtpl")
 		DisplayTmpl(w, mymessage, "template/telnet.gtpl")
 	}
 }
